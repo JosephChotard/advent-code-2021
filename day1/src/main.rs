@@ -1,5 +1,6 @@
 fn main() {
     a();
+    b();
 }
 
 fn a() {
@@ -18,4 +19,19 @@ fn a() {
     }
 
     println!("Num of depth increases {:?}", num_increases);
+}
+
+fn b() {
+    let count = include_str!("../inputb.txt")
+        .lines()
+        .map(|n| n.parse::<usize>().expect("Not a number"))
+        .collect::<Vec<usize>>()
+        .windows(3)
+        .map(|w| w[0] + w[1] + w[2])
+        .collect::<Vec<usize>>()
+        .windows(2)
+        .filter(|w| w[1] > w[0])
+        .count();
+
+    println!("Num of depth increases for 2 {:?}", count);
 }
