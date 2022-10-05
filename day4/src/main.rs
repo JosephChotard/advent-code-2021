@@ -1,5 +1,6 @@
 fn main() {
     a();
+    b();
 }
 
 const SIZE: usize = 5;
@@ -97,5 +98,53 @@ fn a() {
             println!("Result for bingo 1 is {:?}", sum * number);
             return;
         }
+    }
+}
+
+fn b() {
+    let mut lines = include_str!("../inputb.txt").lines();
+    let inputs = lines
+        .next()
+        .expect("Initial line isn't there")
+        .split(',')
+        .map(|n| n.parse::<usize>().expect("initial line not a num"));
+
+    let mut boards = lines.fold(Vec::<BingoBoard>::new(), |mut boards, line| {
+        if line.len() == 0 {
+            boards.push(BingoBoard {
+                grid: Vec::new(),
+                marked_positions: Vec::new(),
+            });
+            return boards;
+        }
+        let board = boards.last_mut().unwrap();
+        board.new_row(
+            line.split(' ')
+                .filter(|i| i.trim().len() > 0)
+                .map(|n| n.trim().parse::<usize>().expect("Not a number"))
+                .collect::<Vec<usize>>()
+                .try_into()
+                .unwrap(),
+        );
+        boards
+    });
+
+    for number in inputs {
+        let mut non_bingo_boards: Vec<&mut BingoBoard> =
+            boards.iter_mut().filter(|b| !b.check_for_bingo()).collect();
+
+        if non_bingo_boards.len() == 1 {
+            let only_board_left = non_bingo_boards.get_mut(0).expect("len is 1");
+            only_board_left.mark_number(number);
+
+            if only_board_left.check_for_bingo() {
+                let sum = only_board_left.sum_unmarked();
+                println!("Result for bingo 2 is {:?}", sum * number);
+                return;
+            }
+        }
+        non_bingo_boards
+            .iter_mut()
+            .for_each(|b| b.mark_number(number));
     }
 }
