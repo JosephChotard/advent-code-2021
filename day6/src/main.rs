@@ -1,10 +1,9 @@
 fn main() {
-    a();
+    calculate(80);
+    calculate(256);
 }
 
-const NUM_DAYS: usize = 80;
-
-fn a() {
+fn calculate(days: usize) {
     // State holds the number of lantern fish per timer position (index is time left)
     let mut state: [usize; 9] = include_str!("../input.txt")
         .split(",")
@@ -14,7 +13,7 @@ fn a() {
             acc
         });
 
-    for _ in 0..NUM_DAYS {
+    for _ in 0..days {
         let num_of_0 = state[0];
         for i in 1..9 {
             state[i - 1] = state[i]
@@ -24,5 +23,5 @@ fn a() {
     }
 
     let num_fish: usize = state.iter().sum();
-    println!("P1 num of fish after {} days is {}", NUM_DAYS, num_fish);
+    println!("num of fish after {} days is {}", days, num_fish);
 }
