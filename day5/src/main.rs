@@ -67,6 +67,7 @@ impl Iterator for Line {
 }
 fn main() {
     a();
+    b();
 }
 
 fn a() {
@@ -85,5 +86,23 @@ fn a() {
             .fold(0, |acc, c| if c > &1 { acc + 1 } else { acc })
             + acc
     });
-    println!("The num of danger zones is {}", count);
+    println!("The num of danger zones for 1 is {}", count);
+}
+
+fn b() {
+    let lines = include_str!("../inputb.txt")
+        .lines()
+        .map(|line| Line::new(line));
+    let mut grid = [[0; SIZE]; SIZE];
+    lines.for_each(|line| {
+        line.for_each(|p| {
+            grid[p.1][p.0] += 1;
+        })
+    });
+    let count: usize = grid.iter().fold(0, |acc, row| {
+        row.iter()
+            .fold(0, |acc, c| if c > &1 { acc + 1 } else { acc })
+            + acc
+    });
+    println!("The num of danger zones for 2 is {}", count);
 }
