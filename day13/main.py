@@ -65,10 +65,15 @@ def a(grid, instructions):
     return count
 
 def b(grid, instructions):
-    return 0
-    
+    for instruction in instructions:
+        grid = fold(grid, instruction[0], instruction[1])
+    print_grid(grid)
+
+def print_grid(grid):
+    for row in grid:
+        print(''.join(['#' if cell else '.' for cell in row]))
 
 if __name__ == '__main__':
     grid, instructions = read_input()
     print(f"A: {a(grid, instructions)}")
-    print(f"B: {b(grid, instructions)}")
+    b(grid, instructions)
